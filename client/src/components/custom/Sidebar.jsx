@@ -11,7 +11,7 @@ const Sidebar = () => {
     ];
     
     return (
-        <div className="sidebar min-h-screen border-r-2 border-slate-600 w-16 text-center pt-6 bg-slate-900 flex flex-col text-gray-200">
+        <div className="sidebar min-h-screen border-r-2 border-gray-vlight w-24 text-center pt-6 bg-gray-medium flex flex-col text-gray-200">
             {SidebarItems.map((item, index) => (
                 <div key={index} className="sidebar-item text-xl mb-5">
                     <Tooltip content={item.content}>

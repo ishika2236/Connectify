@@ -12,8 +12,8 @@ import {
 
 const Conversation = () => {
   return (
-    <div className="bg-gradient-to-b from-slate-900 to slate-1000 w-full h-full">
-      <div className="conversation-banner flex items-center justify-between px-5 py-5 border-b border-gray-700">
+    <div className="bg-gray-dark w-full h-full">
+      <div className="conversation-banner flex items-center justify-between px-5 py-5 border-b border-gray-vlight bg-gray-medium">
         
         {/* Profile Section */}
         <div className="flex items-center space-x-3">

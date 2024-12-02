@@ -1,14 +1,16 @@
 import { Result } from 'postcss'
 import React from 'react'
 import {Routes, Route}  from 'react-router-dom'
-import Chats from './pages/Chats'
+import HomePage from './pages/HomePage'
+import Login from './components/custom/Login'
 
 const App = () => {
   return (
-    <div className='px-0 md:px-0 lg:px-0 sm:px-0 min-h-screen bg-gradient-to-b from-slate-950 to-black'>
+    <div className='px-0 md:px-0 lg:px-0 sm:px-0 min-h-screen '>
       
       <Routes>
-        <Route path='/' element={<Chats/>}></Route>
+        <Route path='/' element={<HomePage/>}></Route>
+        <Route path='/login' element={<Login/>}></Route>
       </Routes>
       
     </div>
