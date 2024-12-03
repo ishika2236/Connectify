@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 
 app.use('/api', loginRoutes);
 app.use('/api/user',authMiddleware, userRoutes);
-app.use('api/chat',authMiddleware,chatRoutes);
+app.use('/api/chat',authMiddleware,chatRoutes);
 
 
 const PORT = process.env.PORT || 5000; 
