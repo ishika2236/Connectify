@@ -46,7 +46,7 @@ const login = asyncHandler(async(req,res)=>{
       
       if(user && ( user.password === password))
       {
-        const token = generateToken(user._id);
+        const token = generateToken(user._id) ;
         res.json({
           id: user._id,
           name: user.name,

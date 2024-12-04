@@ -1,11 +1,11 @@
 const url = import.meta.env.VITE_API_URL;
 
-const getContact = async() =>
+const getUsers = async(search) =>
 {
     try {
         const token = localStorage.getItem('token');
-        console.log(`${url}/api/user/getContacts`);
-        const response = await fetch(`${url}/api/user/getContacts`,{
+        console.log(`${url}/api/user/getUsers`);
+        const response = await fetch(`${url}/api/user/getUsers?search=${search}`,{
             method: 'GET',
             mode: 'cors',
             headers: {
@@ -16,7 +16,7 @@ const getContact = async() =>
         if(response.ok)
         {
             const contactsData = response.json();
-            // console.log("contacts fetched successfully", contactsData);
+            console.log("contacts fetched successfully", contactsData);
             return contactsData;
         }
         
@@ -26,4 +26,4 @@ const getContact = async() =>
     }
     
 }
-export default getContact;
+export default getUsers;

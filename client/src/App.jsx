@@ -4,6 +4,7 @@ import {Routes, Route}  from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import Login from './components/custom/Login'
 
+
 const App = () => {
   return (
     <div className='px-0 md:px-0 lg:px-0 sm:px-0 min-h-screen '>

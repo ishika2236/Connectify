@@ -20,7 +20,7 @@ export default {
           medium: '#1f2937',
           light: '#3c4350',
           vlight: '#d0d1d5',
-          vvlight: ''
+
         },
         purple: {
           light: '#7d46b3',
@@ -28,6 +28,7 @@ export default {
           medium: '#704abb',
 
         },
+        blue: '#315ee3',
         pink: '#ca3182',
         mauve: {
           muted: '#9F7C94',  // New muted mauve for a soft accent

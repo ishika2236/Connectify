@@ -24,4 +24,12 @@ const getUsers = asyncHandler(async(req, res) => {
     
 
 }) 
-module.exports = {getUsers};
+const userInfo = asyncHandler(async(req,res) => {
+    if(!req.user)
+    {
+        return res.status(400);
+        throw new Error("User not found");
+    }
+    res.status(200).send(req.user);
+})
+module.exports = {getUsers, userInfo};
