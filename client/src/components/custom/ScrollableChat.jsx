@@ -44,10 +44,11 @@ const ScrollableChat = ({ messages }) => {
                 (isSameSender(messages, message, index, user._id) ||
                   isLastMessage(messages, index, user._id)) && (
                   <Tooltip label={message.sender.name} placement="bottom-start" hasArrow>
+                    
                     <img
                       src={message.sender.profilePic}
                       alt="Sender Profile"
-                      className="w-8 h-8 rounded-full"
+                      className="w-10 h-10 rounded-full my-2"
                     />
                   </Tooltip>
                 )}
@@ -59,8 +60,8 @@ const ScrollableChat = ({ messages }) => {
 
             
               <span
-                className={`bg-blue/75 rounded-lg px-3 py-1 max-w-xs my-1 flex-col ${
-                  message.sender._id === user._id ? 'ml-auto bg-pink/75 text-white' : ''
+                className={`bg-gray-light rounded-lg px-3 py-2 max-w-xs my-2 mx-2  flex-col ${
+                  message.sender._id === user._id ? 'ml-auto bg-pink text-white' : ''
                 }`}
               >
                 {message.content}

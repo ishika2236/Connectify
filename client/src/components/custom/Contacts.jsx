@@ -65,6 +65,14 @@ const Contacts = () => {
     await setSelectedChat(chat);
     
   }
+  const getChatName = (chat) => {
+    if (chat.isGroupChat) {
+      return chat.chatName;
+    }
+    // For one-on-one chats, find the other user's name
+    const otherUser = chat.users.find((u) => u._id !== user._id);
+    return otherUser ? otherUser.name : "Unknown User";
+  };
 
   return (
     <div className="w-160 text-xl min-h-screen border-r-2 border-gray-700 bg-gray-medium">
@@ -127,7 +135,7 @@ const Contacts = () => {
               />
             </div>
             <div className="contact-info w-full">
-              <h4 className="text-white-off">{chat.chatName}</h4>
+              <h4 className="text-white-off">{getChatName(chat)}</h4>
               <div className="flex justify-between text-sm text-gray-400">
                 <p>{chat.lastMessage}</p>
                 <p>{chat.time}</p>

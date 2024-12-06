@@ -19,16 +19,30 @@ import { ChatContext } from '../../context/ChatProvider';
 import fetchMessages from '../../services/fetchMessages';
 import './Conversation.css'
 import ScrollableChat from './ScrollableChat';
+import io from 'socket.io-client'
 
-
+const ENDPOINT = "http://localhost:8080"
+  let socket, selectedChatCompare;
 const Conversation = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
   const {user, selectedChat, setSelectedChat} = useContext(ChatContext);
+  const [socketConnected, setSocketConnected] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  useEffect(() => {
+    socket = io(ENDPOINT)
+    socket.emit('setup',user);
+    socket.on("connection",()=> setSocketConnected(true));
+    
+    
+},[user])
+  
 
   const sendMessageHandler = async (event) => {
     if (event.key === "Enter" && newMessage) {
+      socket.emit('stop typing',selectedChat._id);
       try {
         console.log(selectedChat);
   
@@ -36,7 +50,7 @@ const Conversation = () => {
         setNewMessage("");
         console.log(response);
   
-        // Append the new message directly to the messages array
+        socket.emit("new message",response);
         setMessages((prevMessages) => [...prevMessages, response]);
       } catch (error) {
         toaster.create({
@@ -55,27 +69,64 @@ const Conversation = () => {
         try {
           setLoading(true);
           const result = await fetchMessages(selectedChat._id);
-          console.log(result); 
           setMessages(result);
           setLoading(false);
+          socket.emit('join chat', selectedChat._id);
         } catch (error) {
           console.error("Error fetching messages:", error.message);
-          toaster.create({
-            title: "Failed to fetch messages",
-            description: error.message,
-            status: "error",
-            isClosable: true,
-          });
           setLoading(false);
         }
       }
     };
   
     fetchChatMessages();
+    selectedChatCompare = selectedChat;
+  
+  
+    return () => {
+      socket.off("message recieved");
+    };
   }, [selectedChat]);
+  
+  useEffect(() => {
+    socket.on("message recieved",(newMessageRecieved)=>{
+      if(!selectedChatCompare || selectedChatCompare._id != newMessageRecieved.chat._id)
+      {
+        //give notification
+      }
+      else{
+        setMessages((prevMessages) => [...prevMessages, newMessageRecieved]);
+
+      }
+    })
+    socket.on('typing',()=>setIsTyping(true));
+    socket.on('stop typing',()=>setIsTyping(false));
+    return () => {
+      socket.off("message recieved");
+    };
+  })
+  
   
   const typingHandler = (e) =>{
     setNewMessage(e.target.value);
+    if(!socketConnected) return;
+
+    if(!typing)
+    {
+      setTyping(true);
+      socket.emit('typing',selectedChat._id);
+    }
+    let lastTypingTime = new Date().getTime();
+    let timer = 3000;
+    setTimeout(() => {
+      let timeNow = new Date.getTime();
+      let timediff = timeNow- lastTypingTime;
+      if(timediff >= timer && typing)
+      {
+        socket.emit('stop typing',selectedChat._id);
+      }
+      
+    }, timer);
 
   }
 
@@ -164,6 +215,7 @@ const Conversation = () => {
         <ScrollableChat messages={messages} />
       </div>
       <div className="input-box-container">
+        {isTyping? <div><video src='/Animation - 1733517092182.webm' autoPlay  className='h-8 w-8' ></video></div> : <></>}
         <Input
           className="bg-gray-700 h-12 p-2 border rounded-md border-gray-medium z-10"
           onKeyDown={sendMessageHandler}
