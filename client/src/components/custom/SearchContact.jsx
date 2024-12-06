@@ -7,25 +7,30 @@ import {
     PopoverTitle,
     PopoverTrigger,
   } from "./../ui/popover"
+import { useContext } from 'react'
 import { Input, Button } from '@chakra-ui/react'
 import { Toaster, toaster } from "../ui/toaster"
 import getUsers from '../../services/getContacts'
 import { div, title } from 'framer-motion/client'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment, faPlus } from "@fortawesome/free-solid-svg-icons";
-// import { faRocketchat } from '@fortawesome/free-brands-svg-icons'
+import { ChatContext } from '../../context/ChatProvider'
+import {
+  Skeleton,
+  SkeletonCircle,
+  SkeletonText,
+} from "../ui/skeleton"
+import { Stack , HStack, Text} from '@chakra-ui/react'
+import UserListItem from './UserAvatar/UserListItem'
+import accessChats from '../../services/accessChats'
 const SearchContact = () => {
   const [contacts, setContacts] = useState([]);
-  // useEffect(async () => {
-  //   const contactsList = await getContact();
-  //   // setContacts(contactsList.users);
 
-  // },[])
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState("");
   const [loadingChat, setLoadingChat] = useState("");
-  // const toast = useToast();
+  const {user, setSelectedChat, chats, setChats} = useContext(ChatContext);
+  
+
   const handleSearch =async ()=>{
     if(!search)
     {
@@ -41,9 +46,31 @@ const SearchContact = () => {
       setLoading(true);
       const contactsData = await getUsers(search);
       setContacts(contactsData);
+      
+      setLoading(false);
     } catch (error) {
       console.log(`Error incurred in fetching users `, error);
     }
+  }
+  const accessChat = async (userId) => {
+    
+    try {
+      setLoadingChat(true);
+      const chat = await accessChats(userId);
+      console.log(chat);
+      if(!chats.find((c)=>c._id === chat._id)) setChats([chat, ...chats]);
+      setSelectedChat(chat);
+      setLoadingChat(false);
+    } catch (error) {
+      toaster.create({
+        title: 'Error fetching the chat',
+        description: error.message,
+        status: "error",
+        isClosable: true
+      })
+    }
+    
+    
   }
   return (
 
@@ -72,21 +99,30 @@ const SearchContact = () => {
                     Go
                   </Button>
                 </div>
-                {contacts.length > 0 ? (
-                  contacts.map((contact, index)=> (
-                    <div className="contact-section flex justify-between border border-pink mb-3 p-2 items-center rounded-md bg-gradient-to-r from-pink/75 to-blue/75"  key={index} >
-                      <div className="name text-white">
-                        {contact.name}
-                      </div>
-                      <div className="text-md p-1 px-2 rounded-full z-15 bg-pink/75 hover:bg-gray-light border-2 border-slate-500 hover:border-pink "> <FontAwesomeIcon icon={faPlus} /></div>
-                    </div>
+                {loading ? (
+                  <Stack spacing={4}>
+                    <HStack>
+                      <Text width="8ch">Loading</Text>
+                      <Skeleton height="20px" flex="1" />
+                    </HStack>
+                  </Stack>
+                ) : contacts.length > 0 ? (
+                  contacts.map((contact, index) => (
+                    <>
+                    <UserListItem
+                     contact={contact}
+                      handleFunction={() => accessChat(contact._id)}
+                      
+                    />
+                    {/* <div>{contact.name}</div> */}
+                    </>
+                    
                   ))
-
-                ): (
-                  <div className='text-md'>No contacts found</div>
+                ) : (
+                  <div className="text-md">No contacts found</div>
                 )}
-                
-            </PopoverBody>
+
+                 </PopoverBody>
         </PopoverContent>
         
     </div>

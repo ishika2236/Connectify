@@ -19,6 +19,9 @@ const accessChats = asyncHandler(async(req,res) =>{
             {users: {$elemMatch: {$eq: userId}}},
         ],
     }).populate("users", "-password").populate("latestMessage");
+    const sender = await User.findById(userId);
+    console.log(sender.name);
+    
    
     
     const oldChat = await User.populate(isChat, {
@@ -33,7 +36,7 @@ const accessChats = asyncHandler(async(req,res) =>{
     }
     else{
         const chatData = {
-            chatName: "sender",
+            chatName:sender.name,
             isGroupChat: false,
             users: [req.user._id, userId]
         }

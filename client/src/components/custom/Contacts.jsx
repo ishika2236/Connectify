@@ -20,16 +20,52 @@ import {
 } from "./../ui/popover"
 import SearchContact from './SearchContact';
 import { Input } from '@chakra-ui/react';
+import { useContext } from 'react';
+import { ChatContext } from '../../context/ChatProvider';
+import { Toaster, toaster } from "../ui/toaster"
+import fetchChats from '../../services/fetchChats';
+import { useState, useEffect } from 'react';
 
 
-const contacts = [
-  { id: 1, name: "John Doe", time: "2:30 PM", profilePic: "https://via.placeholder.com/40", lastMessage: "Hey, how's it going?" },
-  { id: 2, name: "Jane Smith", time: "1:45 PM", profilePic: "https://via.placeholder.com/40", lastMessage: "Let's catch up soon!" },
-  { id: 3, name: "Alice Johnson", time: "12:10 PM", profilePic: "https://via.placeholder.com/40", lastMessage: "Sent a new photo." },
-  { id: 4, name: "Bob Martin", time: "11:30 AM", profilePic: "https://via.placeholder.com/40", lastMessage: "Looking forward to the weekend!" },
-];
+
+// const contacts = [
+//   { id: 1, name: "John Doe", time: "2:30 PM", profilePic: "https://via.placeholder.com/40", lastMessage: "Hey, how's it going?" },
+//   { id: 2, name: "Jane Smith", time: "1:45 PM", profilePic: "https://via.placeholder.com/40", lastMessage: "Let's catch up soon!" },
+//   { id: 3, name: "Alice Johnson", time: "12:10 PM", profilePic: "https://via.placeholder.com/40", lastMessage: "Sent a new photo." },
+//   { id: 4, name: "Bob Martin", time: "11:30 AM", profilePic: "https://via.placeholder.com/40", lastMessage: "Looking forward to the weekend!" },
+// ];
 
 const Contacts = () => {
+  const {user,selectedChat, setSelectedChat, chats, setChats} = useContext(ChatContext);
+  
+  
+  
+  const fetchChat = async() =>{
+    try {
+      const chatData = await fetchChats();
+      console.log(chatData);
+      
+      setChats(chatData);
+      // console.log(chats);
+    } catch (error) {
+      toaster.create({
+        title: 'Error fetching the chat',
+        description: error.message,
+        status: "error",
+        isClosable: true
+      })
+    }
+      
+  }
+  useEffect(() => {
+    fetchChat();
+  }, [])
+  
+  const selectChat =async (chat) =>{
+    await setSelectedChat(chat);
+    
+  }
+
   return (
     <div className="w-160 text-xl min-h-screen border-r-2 border-gray-700 bg-gray-medium">
       <div className="contacts-heading flex justify-between items-center border-b px-5 py-5 border-gray-vlight">
@@ -80,24 +116,28 @@ const Contacts = () => {
           <input placeholder='Search Chat' className='bg-gray-light w-full h-14 p-2 border border-gray-light rounded-lg'/>
         </div>
       <div className="contacts-list w-full">
-        {contacts.map((contact) => (
-          <div key={contact.id} className="contact flex py-4 px-4 border-b border-gray-light items-center hover:bg-gray-light transition-colors duration-200">
+        {chats.length > 0? (
+        chats.map((chat, index) => (
+          <div key={index}  onClick={(e)=> {selectChat(chat)}} className="contact flex py-4 px-4 border-b border-gray-light items-center hover:bg-gray-light transition-colors duration-200">
             <div className="contact-image w-12 h-12 mr-4">
               <img
-                src={contact.profilePic}
-                alt={contact.name}
+                src={chat.profilePic}
+                alt={chat.chatName}
                 className="rounded-full w-full h-full object-cover"
               />
             </div>
             <div className="contact-info w-full">
-              <h4 className="text-white-off">{contact.name}</h4>
+              <h4 className="text-white-off">{chat.chatName}</h4>
               <div className="flex justify-between text-sm text-gray-400">
-                <p>{contact.lastMessage}</p>
-                <p>{contact.time}</p>
+                <p>{chat.lastMessage}</p>
+                <p>{chat.time}</p>
               </div>
             </div>
           </div>
-        ))}
+        ))):
+        (
+          <div className=""> No chats found</div>
+        )}
       </div>
     </div>
   );

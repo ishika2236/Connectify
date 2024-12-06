@@ -2,10 +2,12 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import getUserInfo from '../services/getUserInfo';
 
-const ChatContext = createContext();
+export const ChatContext = createContext();
 
 const ChatProvider = ({ children }) => {
   const [user, setUser] = useState();
+  const [selectedChat,setSelectedChat] = useState();
+  const [chats, setChats] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,7 +19,9 @@ const ChatProvider = ({ children }) => {
       }
 
       try {
+        
         const userInfo = await getUserInfo(token);
+        
         setUser(userInfo);
       } catch (error) {
         console.error('Failed to fetch user info', error);
@@ -29,7 +33,7 @@ const ChatProvider = ({ children }) => {
   }, [navigate]);
 
   return (
-    <ChatContext.Provider value={{ user, setUser }}>
+    <ChatContext.Provider value={{ user, setUser, selectedChat, setSelectedChat, chats, setChats }}>
       {children}
     </ChatContext.Provider>
   );

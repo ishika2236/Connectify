@@ -4,13 +4,13 @@ import { Field } from "../ui/field";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
   });
 
   const [errors, setErrors] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
   });
@@ -27,7 +27,7 @@ const Login = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.username) newErrors.username = "Name is required";
+    if (!formData.name) newErrors.name = "Name is required";
     if (!formData.email) newErrors.email = "Email is required";
     if (!formData.password) newErrors.password = "Password is required";
     setErrors(newErrors);
@@ -39,7 +39,7 @@ const Login = () => {
     if (!validate()) return;
 
     try {
-      const response = await fetch(`http://localhost:8080/api/login`, {
+      const response = await fetch(`http://localhost:8080/api/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -80,14 +80,14 @@ const Login = () => {
 
           <Field
             label="Name"
-            invalid={!!errors.username}
-            errorText={errors.username}
+            invalid={!!errors.name}
+            errorText={errors.name}
           >
             <Input
-              name="username"  
-              value={formData.username}
+              name="name"  
+              value={formData.name}
               onChange={handleChange}
-              isInvalid={!!errors.username}
+              isInvalid={!!errors.name}
               focusBorderColor="teal.400"
               border="1px solid"
               borderColor="gray.500"

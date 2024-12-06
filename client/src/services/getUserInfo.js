@@ -1,3 +1,5 @@
+import { parse } from "postcss";
+
 const url = import.meta.env.VITE_API_URL;
 
 const getUserInfo = async(token)=>{
@@ -8,5 +10,9 @@ const getUserInfo = async(token)=>{
             Authorization: `Bearer ${token}`,
         }
     });
+    const parsedResponse = await response.json();
+    // console.log(parsedResponse);
+    
+    return parsedResponse;
 }
 export default getUserInfo;
