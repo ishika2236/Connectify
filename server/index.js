@@ -5,7 +5,8 @@ const { dbConnection } = require('./utils/dbConnection');
 const loginRoutes = require('./routes/login');
 const userRoutes = require('./routes/user');
 const chatRoutes = require('./routes/chat');
-const messageRoutes = require('./routes/message')
+const messageRoutes = require('./routes/message');
+const statusRoutes = require('./routes/status');
 const authMiddleware = require('./middleware/authMiddleware');
 
 
@@ -78,6 +79,7 @@ app.use('/api', loginRoutes);
 app.use('/api/user',authMiddleware, userRoutes);
 app.use('/api/chat',authMiddleware,chatRoutes);
 app.use('/api/message', authMiddleware, messageRoutes);
+app.use('/api/status', authMiddleware, statusRoutes);
 
 
 const PORT = process.env.PORT || 5000; 

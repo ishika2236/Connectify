@@ -1,8 +1,17 @@
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useState } from 'react'
 
+import { faPlus, faCamera } from '@fortawesome/free-solid-svg-icons'
+import { useState } from 'react'
+import {
+    PopoverBody,
+    PopoverContent,
+    PopoverRoot,
+    PopoverTitle,
+    PopoverTrigger,
+  } from "./../ui/popover"
+import AddStatus from './AddStatus'
 const Status = () => {
     const [recentUpdates, setRecentUpdates] = useState([]);
     const [viewedUpdates, setviewedUpdates] = useState([]);
@@ -16,24 +25,31 @@ const Status = () => {
             <h2 className='text-2xl font-bold bg-gradient-to-r from-gray-200 via-pinkNew to-blue bg-clip-text text-transparent'>Status</h2>
         </div>
         {/* add status button */}
-        <div className="p-4 relative z-20">
-            <div className="w-full bg-gradient-to-r from-gray-500/10 via-pinkNew/5 to-blueNew/10 hover:from-gray-500/20 hover:via-pink-500/10 hover:to-blue-500/20 rounded-2xl p-4 flex items-center space-x-3 transition-all duration-300 backdrop-blur-md shadow-lg shadow-gray-500/10 hover:shadow-pinkNew/10">
-                <div className="relative">
-                <div className="w-14 h-14 rounded-full bg-gradient-to-r from-gray-400 via-pinkNew to-blue p-0.5">
-                        <img src="" alt="" className='rounded-full w-full h-full object-cover transition-opacity duration-300 opacity-100'/>
-                        
+        <PopoverRoot>
+            <PopoverTrigger>
+            <div className="p-4 relative z-20">
+                <div className="w-full bg-gradient-to-r from-gray-500/10 via-pinkNew/5 to-blueNew/10 hover:from-gray-500/20 hover:via-pink-500/10 hover:to-blue-500/20 rounded-2xl p-4 flex items-center space-x-3 transition-all duration-300 backdrop-blur-md shadow-lg shadow-gray-500/10 hover:shadow-pinkNew/10">
+                    <div className="relative">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-r from-gray-400 via-pinkNew to-blue p-0.5">
+                            <img src="" alt="" className='rounded-full w-full h-full object-cover transition-opacity duration-300 opacity-100'/>
+                            
+                        </div>
+                        <div className="absolute bottom-0 right-0 w-6 h-6 bg-gradient-to-r from-pink to-blue rounded-full flex items-center justify-center border-2 border-black shadow-lg">
+                            <FontAwesomeIcon icon={faPlus}className='text-sx text-black'></FontAwesomeIcon>
+                        </div>
                     </div>
-                    <div className="absolute bottom-0 right-0 w-6 h-6 bg-gradient-to-r from-pink to-blue rounded-full flex items-center justify-center border-2 border-black shadow-lg">
-                        <FontAwesomeIcon icon={faPlus}className='text-sx text-black'></FontAwesomeIcon>
+                    <div className="text-left">
+                        <p className='font-semibold text-gray-200'>Add Status</p>
+                        <p className='text-xs text-pinkNew'>Share your updates</p>
                     </div>
+                    
                 </div>
-                <div className="text-left">
-                    <p className='font-semibold text-gray-200'>Add Status</p>
-                    <p className='text-xs text-pinkNew'>Share your updates</p>
-                </div>
-                
             </div>
-        </div>
+
+            </PopoverTrigger>
+            <AddStatus/>
+        </PopoverRoot>
+        
         {recentUpdates.length > 0? (
             <>
                 <div className="p-4 border-b border-gray-800/20 backdrop-blur-md bg-black/30 relative z-10">

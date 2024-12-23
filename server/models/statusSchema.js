@@ -14,14 +14,13 @@ const statusSchema = mongoose.Schema({
             },
             type: {
                 type: String, 
-                enum: ['image, video'],
-                required: tru
+                enum: ['image', 'video'],
+                required: true
             },
             caption:{type: String}
         }
     ],
-    createdAt: { type: Date, default: Date.now },
-    expiresAt: { type: Date, default: () => Date.now() + 24 * 60 * 60 * 1000 },
+    createdAt: { type: Date, default: Date.now , expires: 86400},
     viewedBy: [
       {
         viewerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
