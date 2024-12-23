@@ -70,11 +70,13 @@ const fetchChats = asyncHandler(async(req, res)=>{
 })
 
 const createGroupChat = asyncHandler(async(req,res)=>{
+    
     if(!req.body.users || !req.body.name)
     {
         return res.status(400).json({error: "Please send all the required fields"});
     }
-    const users = JSON.parse(req.body.users);
+    const users = (req.body.users);
+    
     if(users.length < 2)
     {
         return res.status(500).json({error: "Atleast 2 users are required to form a group chat."});
@@ -85,7 +87,9 @@ const createGroupChat = asyncHandler(async(req,res)=>{
             chatName: req.body.name,
             users: users,
             isGroupChat: true,
-            groupAdmin: req.user
+            groupAdmin: req.user,
+            description: req.body.description,
+            picURL: req.body.picURL
         })
         const fullGroupChat = await Chat.findOne({_id: groupChat._id})
         .populate("users", "-password")
@@ -116,8 +120,11 @@ const renameGroupChat = asyncHandler(async(req,res)=>{
     }
 })
 const addToGroup = asyncHandler(async(req,res)=>{
-    const {chatId, userId} = req.body;
-    if(!chatId || !userId)
+  
+    const {chatId, userIds} = req.body;
+    
+    
+    if(!chatId || !userIds )
     {
         res.status(400).json({error: "Please send all the fields"});
     }
@@ -125,12 +132,14 @@ const addToGroup = asyncHandler(async(req,res)=>{
         const updatedChat =await Chat.findByIdAndUpdate(chatId,
             {
                 $push:{
-                users : userId
+                    users: { $each: userIds },
                 }
             },
         {new: true})
         .populate("users", "-password")
         .populate("groupAdmin", "-password");
+        
+        
         if(!updatedChat)
         {
             res.status(400);
@@ -151,9 +160,10 @@ const addToGroup = asyncHandler(async(req,res)=>{
 
 const removeFromGroup = asyncHandler(async(req,res)=>{
     const {chatId, userId} = req.body;
+
     if(!chatId || !userId)
     {
-        res.status(400).json({error: "Please send all the fields"});
+        return res.status(400).json({error: "Please send all the fields"});
     }
     try {
         const updatedChat =await  Chat.findByIdAndUpdate(chatId,
@@ -167,19 +177,37 @@ const removeFromGroup = asyncHandler(async(req,res)=>{
         .populate("groupAdmin", "-password");
         if(!updatedChat)
         {
-            res.status(400);
+            return res.status(400);
             throw new Error("Chat not found");
         }
-        else{
-        res.status(200).json({updatedChat});
+        // else{
+        // console.log(upd);
+        
+        return res.status(200).json({updatedChat});
 
-        }
+        // }
 
-        // console.log(updatedChat);
+        console.log(updatedChat);
         
 
     } catch (error) {
         return res.status(500).json({error: "Server error occured."});
     }
 })
-module.exports = {accessChats, fetchChats, createGroupChat, renameGroupChat, addToGroup, removeFromGroup};
+const deleteChat = asyncHandler(async(req,res)=>{
+    const {chatId} = req.body;
+
+    if(!chatId)
+    {
+        return res.status(400).json({error: "chatId not found!"});
+    }
+    try {
+        
+        await Chat.deleteOne({_id: chatId});
+        return res.status(200).json({message: "Chat deleted successfully!"})
+    } catch (error) {
+        res.status(500).json({error: 'Server error occured in deleting chat'});
+    }
+    
+})
+module.exports = {accessChats, fetchChats, createGroupChat, renameGroupChat, addToGroup, removeFromGroup, deleteChat};

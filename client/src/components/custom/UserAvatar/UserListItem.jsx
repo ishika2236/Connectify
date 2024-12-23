@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Avatar, Box } from '@chakra-ui/react'; // Import Chakra UI components
+import { Avatar, Box } from '@chakra-ui/react'; 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { ChatContext } from '../../../context/ChatProvider';
@@ -12,30 +12,23 @@ const UserListItem = (props) => {
   return (
     <Box
       onClick={handleFunction}
+      w={"full"}
       display="flex" 
-      cursor="pointer"
-      alignItems="center"
-      justifyContent={"space-between"}
-      px={3}
-      py={2}
-      mb={2}
-      borderRadius="lg" 
-      border="2px solid"
-      borderColor="pink"
-       className="bg-gradient-to-r from-pink/75 to-blue/75"
+     
     >
+      <div className="flex justify-between w-full items-center px-2 h-full">
+        <div className=" flex items-center ">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-500 via-pink to-blue-500 p-0.5 hover:shadow-lg hover:shadow-pink/20">
+            <img alt="image" src={contact.profilePic} className='rounded-full w-full h-full object-cover transition-opacity duration-300 opacity-100'/> 
+          </div>
+          <div className="px-4">
+            <h4 className='font-semibold text-sm'>{contact.name}</h4>
+            <p className='text-xs'>{contact.bio}</p>
+          </div>
+        </div>
+        <div className="w-6 h-6 rounded-full border-2 border-gray-700 group-hover:border-pink transition-all group-hover:shadow-lg group-hover:shadow-pink/20"></div>
+      </div>
       
-      <div className="flex  items-center">
-      <img alt="image" src={contact.profilePic} className='h-8 w-8 rounded-full mr-2'/> 
-      <div className="flex-col">
-        <div className="text-white h-full text-md">{contact.name}</div>
-        
-        <div className="bio text-xs">{contact.bio}</div>
-      </div>
-      </div>
-      <div className="text-md p-1 px-2 rounded-full bg-pink/75 hover:bg-gray-light border-2 border-slate-500 hover:border-pink">
-        <FontAwesomeIcon icon={faPlus} />
-      </div>
     </Box>
   );
 }

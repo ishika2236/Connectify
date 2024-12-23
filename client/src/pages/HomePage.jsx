@@ -1,8 +1,9 @@
 import React from 'react'
 import Sidebar from '../components/custom/Sidebar'
-import Contacts from '../components/custom/Contacts'
+import ContactsNew from '../components/custom/ContactsNew'
 import Conversation from '../components/custom/Conversation'
 import { Container , Box} from '@chakra-ui/react'
+import ChatBox from '../components/custom/ChatBox'
 
 const HomePage = () => {
   return (
@@ -19,9 +20,10 @@ const HomePage = () => {
    
       <Sidebar className="w-64" />
 
-      <Contacts className="w-96 z-10 relative" />
+      <ContactsNew className="w-96 z-10 relative" />
 
-      <Conversation className="flex-grow" />
+      {/* <Conversation className="flex-grow" /> */}
+      <ChatBox />
       
     </Box>
     

@@ -10,7 +10,7 @@ import {
 import { useContext } from 'react'
 import { Input, Button } from '@chakra-ui/react'
 import { Toaster, toaster } from "../ui/toaster"
-import getUsers from '../../services/getContacts'
+import getUsers from '../../services/getUsers'
 import { div, title } from 'framer-motion/client'
 import { ChatContext } from '../../context/ChatProvider'
 import {
@@ -26,7 +26,7 @@ const SearchContact = () => {
 
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-  const [loading, setLoading] = useState("");
+  const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState("");
   const {user, setSelectedChat, chats, setChats} = useContext(ChatContext);
   

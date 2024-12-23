@@ -12,24 +12,27 @@ export default {
         '160': '40rem',
         '200': '50rem'
       },
+      animation: {
+        wiggle: 'wiggle 20s ease-in-out infinite',
+        customPulse: 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite '
+      },
       colors: {
         
         gray:
         {
+          darkNew: '#0d1117',
+          mediumNew: '#171c24',
           dark: '#111827',
           medium: '#1f2937',
           light: '#3c4350',
           vlight: '#d0d1d5',
 
         },
-        purple: {
-          light: '#7d46b3',
-          dark: '#8045b1',
-          medium: '#704abb',
-
-        },
+        purpleDark :'#a78bfa',
+        purpleLight : '#8b5cf6',
         blue: '#315ee3',
         pink: '#ca3182',
+        pinkNew: '#F472B6',
         mauve: {
           muted: '#9F7C94',  // New muted mauve for a soft accent
         },
