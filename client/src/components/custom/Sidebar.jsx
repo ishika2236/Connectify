@@ -4,6 +4,7 @@ import { ChatContext } from '../../context/ChatProvider'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGear, faMessage, faPhoneVolume, faPodcast } from '@fortawesome/free-solid-svg-icons'
 import { color } from 'framer-motion'
+import { Link } from 'react-router-dom'
 
 const Sidebar = () => {
     const {user, selectedChat, setSelectedChat} = useContext(ChatContext);
@@ -12,13 +13,13 @@ const Sidebar = () => {
       
     }, [])
     const SidebarItems = [
-        { icon: faMessage, content: "messages", color: 'blue' },
-        { icon: faPhoneVolume, content: "calls", color:'purple' },
-        { icon: faPodcast, content: "status" , color:'pink'},
+        { icon: faMessage, content: "messages", color: 'blue', to: '/' },
+        { icon: faPhoneVolume, content: "calls", color:'purple' , to: '/calls'},
+        { icon: faPodcast, content: "status" , color:'pink', to: '/status'},
     ];
     
   return (
-    <div className='h-screen border-r border-gray-800/70 pt-15  py-10 px-5 bg-gradient-to-b from-gray-900/10 via-gray-800/10 to-purpleDark/5'>
+    <div className='h-screen border-r border-gray-800/70 pt-15  py-10 px-5 bg-gradient-to-b from-gray-950/10 via-gray-800/10 to-purpleDark/5'>
         {/* user header */}
         <div className="p-4 flex flex-col items-center lg:items-start space-y-4 border-b border-gray-800/50 relative z-20">
         <div className="flex flex-col justify-center items-center">
@@ -34,12 +35,15 @@ const Sidebar = () => {
         <div className="flex-1 py-4 relative z-20 ">
                 <ul>
                     {SidebarItems.map((item, index)=>(
+                        
                         <li key={index} className='relative px-4 my-5'>
-                            <div className="flex items-center lg:space-x-3 py-2 px-4 rounded-xl bg-gradient-to-r from-blue/10 via-pinkNew/5 to-purpleLight/10 hover:from-blue/20 hover:via-pinkNew/10 hover:to-purpleLight/20 transition-all group backdrop-blur-sm shadow-lg shadow-blue/10">
-                            <FontAwesomeIcon icon={item.icon} style={{color: item.color}}></FontAwesomeIcon>
-                            <span className='hidden lg:block lg:mx-2'>{item.content}</span>
+                            
+                                <Link to={item.to} className="flex items-center lg:space-x-3 py-2 px-4 rounded-xl bg-gradient-to-r from-blue/10 via-pinkNew/5 to-purpleLight/10 hover:from-blue/20 hover:via-pinkNew/10 hover:to-purpleLight/20 transition-all group backdrop-blur-sm shadow-lg shadow-blue/10">
+                                <FontAwesomeIcon icon={item.icon} style={{color: item.color}}></FontAwesomeIcon>
+                                <span className='hidden lg:block lg:mx-2'>{item.content}</span>
 
-                            </div>
+                                </Link>
+                            
                         </li>
                     ))}
                 </ul>

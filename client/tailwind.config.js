@@ -12,6 +12,12 @@ export default {
         '160': '40rem',
         '200': '50rem'
       },
+      height:{
+        '120': '30rem', 
+        '144': '36rem', 
+        '160': '40rem',
+        '200': '50rem'
+      },
       animation: {
         wiggle: 'wiggle 20s ease-in-out infinite',
         customPulse: 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite '

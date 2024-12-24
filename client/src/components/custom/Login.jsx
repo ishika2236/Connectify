@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import { Button, Input, Stack, Box, Text } from "@chakra-ui/react";
-import { Field } from "../ui/field";
+import React, { useState } from "react";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -28,10 +26,18 @@ const Login = () => {
   const validate = () => {
     const newErrors = {};
     if (!formData.name) newErrors.name = "Name is required";
-    if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.password) newErrors.password = "Password is required";
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;  // Returns true if no errors
+    return Object.keys(newErrors).length === 0;
   };
 
   const onSubmit = async (e) => {
@@ -45,13 +51,12 @@ const Login = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-        mode: "cors",
       });
 
       if (response.ok) {
         const result = await response.json();
-        console.log('Login successful', result);
-        localStorage.setItem('token', result.token);
+        console.log("Login successful", result);
+        localStorage.setItem("token", result.token);
       } else {
         const error = await response.json();
         setErrorMessage(error.message || "Login failed");
@@ -62,89 +67,114 @@ const Login = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="100vh"
-      bg="gray.800"
-      p={4}
-    >
-      <form onSubmit={onSubmit} style={{ width: '100%', maxWidth: '400px' }}>
-        <Stack gap="4" align="flex-end">
-          {errorMessage && (
-            <Text color="red.500" fontSize="sm" textAlign="right">
-              {errorMessage}
-            </Text>
-          )}
+    <div style={styles.container}>
+      <form onSubmit={onSubmit} style={styles.form}>
+        {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
 
-          <Field
-            label="Name"
-            invalid={!!errors.name}
-            errorText={errors.name}
-          >
-            <Input
-              name="name"  
-              value={formData.name}
-              onChange={handleChange}
-              isInvalid={!!errors.name}
-              focusBorderColor="teal.400"
-              border="1px solid"
-              borderColor="gray.500"
-              _focus={{ borderColor: "teal.400" }}
-            />
-          </Field>
+        {/* Name Field */}
+        <div style={styles.field}>
+          <label style={styles.label}>Name</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            style={styles.input}
+          />
+          {errors.name && <p style={styles.error}>{errors.name}</p>}
+        </div>
 
-          <Field
-            label="Email"
-            invalid={!!errors.email}
-            errorText={errors.email}
-          >
-            <Input
-              name="email"  // Match the name in the state (email)
-              value={formData.email}
-              onChange={handleChange}
-              isInvalid={!!errors.email}
-              focusBorderColor="teal.400"
-              border="1px solid"
-              borderColor="gray.500"
-              _focus={{ borderColor: "teal.400" }}
-            />
-          </Field>
+        {/* Email Field */}
+        <div style={styles.field}>
+          <label style={styles.label}>Email</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            style={styles.input}
+          />
+          {errors.email && <p style={styles.error}>{errors.email}</p>}
+        </div>
 
-          <Field
-            label="Password"
-            invalid={!!errors.password}
-            errorText={errors.password}
-          >
-            <Input
-              name="password"  // Match the name in the state (password)
-              value={formData.password}
-              onChange={handleChange}
-              isInvalid={!!errors.password}
-              focusBorderColor="teal.400"
-              border="1px solid"
-              borderColor="gray.500"
-              _focus={{ borderColor: "teal.400" }}
-              type="password"
-            />
-          </Field>
+        {/* Password Field */}
+        <div style={styles.field}>
+          <label style={styles.label}>Password</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            style={styles.input}
+          />
+          {errors.password && <p style={styles.error}>{errors.password}</p>}
+        </div>
 
-          <Button
-            type="submit"
-            colorScheme="teal"
-            width="full"
-            _hover={{ bg: "teal.600" }}
-            _active={{ bg: "teal.700" }}
-            border="1px solid"
-            borderColor="teal.400"
-          >
-            Submit
-          </Button>
-        </Stack>
+        <button type="submit" style={styles.button}>
+          Submit
+        </button>
       </form>
-    </Box>
+    </div>
   );
+};
+
+const styles = {
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "100vh",
+    backgroundColor: "#f8f9fa",
+  },
+  form: {
+    width: "100%",
+    maxWidth: "400px",
+    padding: "20px",
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    backgroundColor: "#fff",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+  },
+  field: {
+    marginBottom: "15px",
+  },
+  label: {
+    display: "block",
+    marginBottom: "5px",
+    fontWeight: "bold",
+    color: "#333",
+  },
+  input: {
+    width: "100%",
+    padding: "10px",
+    fontSize: "16px",
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    boxSizing: "border-box",
+  },
+  button: {
+    width: "100%",
+    padding: "10px",
+    fontSize: "16px",
+    backgroundColor: "#007bff",
+    color: "#fff",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+  },
+  buttonHover: {
+    backgroundColor: "#0056b3",
+  },
+  error: {
+    color: "red",
+    fontSize: "14px",
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: "16px",
+    marginBottom: "15px",
+    textAlign: "center",
+  },
 };
 
 export default Login;

@@ -67,7 +67,7 @@ const ContactsNew = ({refreshContact}) => {
   };
 
   return (
-    <div className='h-screen bg-gradient-to-b from-gray-800/5 via-blue/5 via-pinkNew/5 to-purpleDark/5'>
+    <div className='h-screen bg-gradient-to-b from-gray-950/50 via-blue/5  to-black/50'>
         <div className="w-144  p-6 relative">
             <div className="flex items-center justify-between">
                 <h1 className='text-2xl font-bold bg-gradient-to-r from-gray-200 via-pinkNew to-gray-400 bg-clip-text text-transparent animate-gradient'>Chats</h1>

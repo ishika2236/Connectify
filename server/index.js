@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 require('dotenv').config();
 const { dbConnection } = require('./utils/dbConnection');
+const path = require('path');
 const loginRoutes = require('./routes/login');
 const userRoutes = require('./routes/user');
 const chatRoutes = require('./routes/chat');
@@ -18,6 +19,7 @@ const server = http.createServer(app);
 dbConnection();
 
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
