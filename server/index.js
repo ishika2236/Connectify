@@ -8,7 +8,9 @@ const userRoutes = require('./routes/user');
 const chatRoutes = require('./routes/chat');
 const messageRoutes = require('./routes/message');
 const statusRoutes = require('./routes/status');
+const callRoutes = require('./routes/call');
 const authMiddleware = require('./middleware/authMiddleware');
+const {PeerServer} = require('peer');
 
 
 const app = express();
@@ -20,6 +22,11 @@ dbConnection();
 
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+const peerServer = PeerServer({
+  port: 9000,
+  path: '/peerjs'
+})
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
