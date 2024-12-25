@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { ChatContext } from './../../../context/ChatProvider';
-import { Box, Text, Input } from '@chakra-ui/react';
-import { faGear } from '@fortawesome/free-solid-svg-icons';
+import { Box, Text, Input, IconButton } from '@chakra-ui/react';
+import { faGear, faPaperclip, faFile } from '@fortawesome/free-solid-svg-icons'; // File icon added
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormControl } from '@mui/material';
 import sendMessage from '../../../services/sendMessage';
@@ -18,6 +18,22 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
   const [newMessage, setNewMessage] = useState("");
   const [socketConnected, setSocketConnected] = useState(false);
   const socketRef = useRef();
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [filePreview, setFilePreview] = useState(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
+
+    if (file) {
+      // Show preview for images
+      if (file.type.startsWith('image/')) {
+        setFilePreview(URL.createObjectURL(file));
+      } else {
+        setFilePreview(null); // No preview for non-image files
+      }
+    }
+  };
 
   useEffect(() => {
     const socket = io(ENDPOINT);
@@ -26,7 +42,6 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
     socket.on("connection", () => setSocketConnected(true));
 
     return () => {
-      // Clean up socket on unmount
       socket.disconnect();
     };
   }, [user]);
@@ -61,18 +76,17 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
       });
     }
 
-    // Clean up the listener
     return () => {
       socketRef.current?.off('message recieved');
     };
   }, [selectedChat]);
-  
 
   const sendMessageHandler = async (event) => {
-    if ((event.key === "Enter" || event.type === "click") && newMessage) {
+    if ((event.key === "Enter" || event.type === "click") && (newMessage || selectedFile)) {
       try {
-        const response = await sendMessage(newMessage, selectedChat._id);
-        setNewMessage("");
+        const response = await sendMessage(newMessage, selectedChat._id, selectedFile);
+        setNewMessage("");  // Clear text input
+        setSelectedFile(null); // Clear selected file
         setMessages((prevMessages) => [...prevMessages, response]);
         socketRef.current.emit("new message", response);
       } catch (error) {
@@ -86,8 +100,7 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
   };
 
   return (
-
-    <Box w="100%" display="flex" flexDirection="column" className='h-screen bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950'>
+    <Box w="100%" m={0} display="flex" flexDirection="column" className='h-screen bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950'>
       {!selectedChat ? (
         <Box
           display="flex"
@@ -102,10 +115,6 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
         </Box>
       ) : (
         <>
-          <div class="relative inset-0 z-0 w-[100%]">
-          <div class="absolute top-20 left-20 w-72 h-72 bg-blue/20 rounded-full filter blur-3xl"></div>
-          <div class="absolute top-80 left-80 w-72 h-72 bg-pink/15 rounded-full filter blur-3xl"></div>
-        </div>
           {/* Header Section */}
           <Box
             fontSize={{ base: '28px', md: '30px' }}
@@ -120,14 +129,13 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
             zIndex={10}
             h="10%" 
           >
-
             <div className="flex gap-4 items-center">
               <img
                 src={selectedChat.isGroupChat ? selectedChat.picUrl : selectedChat.users[1]?.profilePic}
                 alt="Profile"
                 className="w-10 h-10 rounded-full"
               />
-              <Text>{selectedChat.chatName || "User"}</Text>
+              <Text>{selectedChat?.isGroupChat ? selectedChat.chatName : selectedChat.users[0]._id !== user._id ? selectedChat.users[0].name : selectedChat.users[1].name}</Text>
             </div>
             <FontAwesomeIcon
               icon={faGear}
@@ -138,7 +146,7 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
 
           {/* Chat Body */}
           <Box flex="1" h="50%" className='relative'>
-            <div className="messages" style={{  maxHeight: 'calc(100vh - 180px)' }}>
+            <div className="messages" style={{ maxHeight: 'calc(100vh - 180px)' }}>
               {loading ? (
                 <>Loading Chat! Calm your horses...</>
               ) : (
@@ -146,20 +154,62 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
               )}
             </div>
           </Box>
-
+          <Box h="15%" w={'100%'} className="p-2 pl-10 flex flex-col" style={{ position: 'relative', bottom: 0, left: 0, right: 0 }}>
+            {/* File Preview Section */}
+            {selectedFile && (
+              <Box
+                h="120px"
+                w="100%"
+                bg="white"
+                p={2}
+                mb={2}
+                borderRadius="8px"
+                boxShadow="md"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Text isTruncated>{selectedFile.name}</Text>
+              </Box>
+            )}
+            </Box>
           {/* Input Section */}
-          <Box h="5%" w={'100%'}  className="p-2 pl-10">
-          <FormControl fullWidth>
-            <Input
-              variant="filled"
-              placeholder="Type a message..."
-              onChange={typingHandler}
-              onKeyDown={sendMessageHandler}
-              value={newMessage}
-              className="w-full absolute bottom-3 bg-gray-800 border border-b-pinkNew border-r-pinkNew border-t-blue border-l-blue"
-            />
-          </FormControl>
+          <Box h="5%" w={'100%'} className="p-2 pl-10">
+            <FormControl fullWidth>
+              <Box display="flex" alignItems="center">
+                
+               
+                <Input
+                  variant="filled"
+                  placeholder="Type a message..."
+                  onChange={typingHandler}
+                  onKeyDown={sendMessageHandler}
+                  value={newMessage}
+                  className="w-full absolute bottom-3 bg-gray-800 border border-b-pinkNew border-r-pinkNew border-t-blue border-l-blue text-white"
+                  
+                />
+                  <FontAwesomeIcon
+                  icon={faPaperclip}
+                  onClick={() => document.getElementById('fileInput').click()} // Handle file input click
+                  
+                  aria-label="Attach file"
+                  mr={2}
+                  className='z-10 text-white'/>
 
+                
+                
+              </Box>
+            </FormControl>
+
+            <Input
+              type="file"
+              id="fileInput"
+              onChange={handleFileChange} // Handle file input change
+              className="hidden"
+              size="sm"
+            />
+
+            
           </Box>
         </>
       )}

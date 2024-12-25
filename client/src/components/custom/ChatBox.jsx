@@ -18,14 +18,16 @@ const ChatBox = ({refreshContact, setRefreshContact}) => {
     
   return (
     <Box d={{base:selectedChat  ? "flex":"none", md:"flex"}}
+        m={0} 
         alignItems={"center"}
         flexDir={"column"}
         p={3}
         w={{base: "100%", md:  "68%"}} 
-        bg={"black"}
+        className='bg-gray-950'
         margin={0}
         minHeight={'screen'}
         height={'fit-content'}
+        width={'100%'}
     >
         {showSettings?(
             <>

@@ -6,8 +6,8 @@ const Chat = require('../models/chatModel');
 const asyncHandler = require('express-async-handler');
 
 const sendMessage = asyncHandler(async(req,res) =>{
-    const {content, chatId} = req.body;
-    if(!content || !chatId)
+    const {content, chatId,  mediaType} = req.body;
+    if((!content || !chatId) && (!req.file || !mediaType))
     {
         console.log("Invalid data passed into request");
         return res.status(400).json({error: "Invalid data passed into request"});
@@ -15,9 +15,17 @@ const sendMessage = asyncHandler(async(req,res) =>{
     try {
         const newMessage = {
             sender: req.user._id,
-            content: content,
+            content: content || "",
             chat : chatId,
+
         };
+        if(req.file)
+        {
+            console.log(mediaType);
+            
+            newMessage.media = `/uploads/${req.file.filename}`;
+            newMessage.mediaType = mediaType;
+        }
         const message = await Message.create(newMessage);
         const populatedMessage = await Message.findById(message._id)
         .populate("sender", "-password")

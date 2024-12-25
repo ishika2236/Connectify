@@ -1,26 +1,29 @@
-const url = import.meta.env.VITE_API_URL;
-
-const sendMessage = async( content, chatId) =>
-{
-    
+const url = import.meta.env.VITE_API_URL
+const sendMessage = async(content, chatId, file) => {
     try {
         const token = localStorage.getItem('token');
-        // console.log(`${url}/api/chats/`);
-        const response = await fetch(`${url}/api/message`,{
+        const formData = new FormData();
+        formData.append('content', content);
+        formData.append('chatId', chatId);
+        if (file) {
+            formData.append('file', file);
+            formData.append('mediaType', file.type);
+        }
+
+        const response = await fetch(`${url}/api/message`, {
             method: 'POST',
             mode: 'cors',
             headers: {
-                "Content-Type": "application/json",
                 'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify({ content: content, chatId: chatId })
+            body: formData,
         });
-        return response.json();
-        
+        const result = await response.json()
+        console.log(result);
+        return result;
+
     } catch (error) {
-        console.log("error occured in fetching contacts", error);
-        
+        console.log("Error occurred in fetching contacts", error);
     }
-    
-}
+};
 export default sendMessage;

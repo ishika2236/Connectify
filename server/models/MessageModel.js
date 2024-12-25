@@ -13,7 +13,17 @@ const messageModel = mongoose.Schema(
         chat: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Chat'
-        }
+        },
+        media: {  
+            type: String, 
+            default: null
+        },
+        mediaType: { 
+            type: String, 
+            enum: ['image/jpeg', 'image/png', 'application/pdf', 'video/mp4', 'audio/mp3'],
+            default: null
+        },
+
     },
     {
         timestamps: true
