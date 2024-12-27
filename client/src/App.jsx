@@ -6,6 +6,7 @@ import ChatPage from './pages/ChatPage'
 import StatusPage from './pages/StatusPage'
 import CallPage from './pages/CallPage'
 import SignUp from './components/custom/SignUp'
+import Login from './components/custom/Login'
 
 
 const App = () => {
@@ -17,6 +18,8 @@ const App = () => {
         <Route path='/signup' element={<SignUp/>}></Route>
         <Route path='/status' element = {<StatusPage/>} ></Route>
         <Route path='/calls' element= {<CallPage/>}></Route>
+        <Route path='/login' element= {<Login/>}></Route>
+
       </Routes>
       
     </div>

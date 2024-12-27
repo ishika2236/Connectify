@@ -11,6 +11,8 @@ const AddStatus = ({ onClose }) => {
 
   const handleSubmit = async () => {
     try {
+      console.log(media[0].file);
+      
       const statusData = media.map((file, index) => ({
         file,
         caption: captions[index] || "",
@@ -38,7 +40,7 @@ const AddStatus = ({ onClose }) => {
 
   return (
     <div className="z-50">
-      <PopoverContent className="bg-gray-950 rounded-3xl overflow-hidden shadow-2xl w-144 min-w-2xl animate-scale-in relative z-10 border border-gray-800z-50">
+      <PopoverContent className="bg-gray-950 rounded-3xl overflow-hidden shadow-2xl w-144 min-w-2xl animate-scale-in relative z-10 border border-gray-800z-50 ">
         <PopoverBody>
           <div>
             <div className="p-6 border-b border-gray-800/50 relative">

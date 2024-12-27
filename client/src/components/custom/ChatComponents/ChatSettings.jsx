@@ -133,7 +133,7 @@ const ChatSettings = ({setShowSettings, showSettings}) => {
                         {/* Info Section */}
                         <div className="space-y-6">
                             {/* Bio Section */}
-                            <div className="space-y-4 bg-gray-800/30 p-4 rounded-xl backdrop-blur-sm border border-gray-700/50">
+                            <div className="space-y-4 bg-gray-800/30 p-4 rounded-xl backdrop-blur-sm border-2 border-gray-700/50">
                                 <div className="flex items-center justify-between">
                                     <div className="text-lg font-semibold text-white">
                                         {selectedChat.isGroupChat ? "Description" : "Bio"}
@@ -151,13 +151,13 @@ const ChatSettings = ({setShowSettings, showSettings}) => {
     
                             {/* Group Members Section */}
                             {selectedChat.isGroupChat && (
-                                <div className="space-y-4 bg-gray-800/30 p-4 rounded-xl backdrop-blur-sm border border-gray-700/30">
+                                <div className="space-y-4 bg-gray-800/30 p-4 rounded-xl backdrop-blur-sm border-2 border-gray-700/30">
                                     <div className="flex items-center justify-between">
                                         <h3 className="text-lg font-semibold text-white">Members</h3>
                                         <PopoverRoot className="w-[100%]">
                                             <PopoverTrigger>
                                                 <button
-                                                    className="border border-b-pinkNew border-l-blue border-t-pinkNew border-r-blue px-3 py-1 rounded-full text-sm hover:opacity-80 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 right-2 absolute top-3 text-white "
+                                                    className="border-1 border-b-blue border-l-pinkNew border-t-pinkNew border-r-blue px-3 py-1 rounded-full text-sm hover:opacity-80 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 right-2 absolute top-3 text-white "
                                                     onClick={() => console.log("Add Member clicked")}
                                                 >
                                                     Add Member
@@ -174,7 +174,7 @@ const ChatSettings = ({setShowSettings, showSettings}) => {
                                         {selectedChat.users.map((member) => (
                                             <div
                                                 key={member._id}
-                                                className="flex items-center space-x-3 hover:bg-gray-700/50 border border-pinkNew my-2 p-3 rounded-lg"
+                                                className="flex items-center space-x-3 hover:bg-gray-700/50 border-1 border-pink/50 my-2 p-3 rounded-lg"
                                             >
                                                 <img
                                                     src={member.profilePic}

@@ -8,7 +8,9 @@ const Sidebar = () => {
   const { user } = useContext(ChatContext);
 
   useEffect(() => {
-    console.log(user);
+    console.log("user: ",user);
+    // console.log("url: ", `${import.meta.env.VITE_API_URL}${user?.profilePic}`);
+    
   }, []);
 
   const SidebarItems = [
@@ -23,7 +25,7 @@ const Sidebar = () => {
       <div className="p-4 flex flex-col items-center justify-center border-b border-gray-800/50">
         <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue via-pink to-blue p-1 shadow-lg shadow-blue/20">
           <img
-            src={user?.profilePic}
+            src={`${import.meta.env.VITE_API_URL}${user?.profilePic}`}
             alt="Profile"
             className="rounded-full w-full h-full object-cover"
           />

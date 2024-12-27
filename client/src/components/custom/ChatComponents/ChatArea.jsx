@@ -124,7 +124,7 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
             fontSize={{ base: '28px', md: '30px' }}
             px={4}
             py={3}
-            className='bg-gray-900 border border-b-blue/50 border-l-blue/50 border-t-pinkNew/50 border-r-pinkNew/50'
+            className='bg-gray-900 border-1 border-b-blue border-l-pinkNew border-t-pinkNew border-r-blue'
             color="white"
             display="flex"
             justifyContent="space-between"
@@ -189,7 +189,7 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
                   onChange={typingHandler}
                   onKeyDown={sendMessageHandler}
                   value={newMessage}
-                  className="w-full absolute bottom-3 bg-gray-800 border border-b-pinkNew border-r-pinkNew border-t-blue border-l-blue text-white"
+                  className="w-full absolute bottom-3 bg-gray-800 border-1 border-b-blue border-r-blue border-t-pinkNew border-l-pinkNew text-white"
                   
                 />
                   <FontAwesomeIcon

@@ -18,6 +18,14 @@ export default {
         '160': '40rem',
         '200': '50rem'
       },
+      boxShadow: {
+        'blue': '0 4px 6px rgba(59, 130, 246, 0.5)', 
+        'pink':'0 4px 6px rgba(244, 114, 182, 0.5)',
+        'pinkNew': '0 4px 6px rgba(249, 168, 212, 0.5)'
+      },
+      borderWidth: {
+        '1': '1px', 
+      },
       animation: {
         wiggle: 'wiggle 20s ease-in-out infinite',
         customPulse: 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite '
@@ -37,6 +45,7 @@ export default {
         purpleDark :'#a78bfa',
         purpleLight : '#8b5cf6',
         blue: '#315ee3',
+        blueNew: '#3B82F6',
         pink: '#ca3182',
         pinkNew: '#F472B6',
         mauve: {
