@@ -4,16 +4,38 @@ import { faCross, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import fetchStatus from '../../services/fetchStatus';
 import ViewStatus from './ViewStatus';
-
+import { PopoverRoot , PopoverTrigger} from '@chakra-ui/react';
+import AddStatus from './AddStatus';
+import viewStatus from '../../services/viewStatus';
 const Status = () => {
   const [recentUpdates, setRecentUpdates] = useState([]);
   const [viewedUpdates, setViewedUpdates] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState({});
   const [showStatus, setShowStatus] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  // const [viewStatus, setViewStatus] = useState(false);
+  
 
-  const handleViewStatus = (status) => {
-    setShowStatus(true);
+  const handlePopoverClose = () => {
+    setIsPopoverOpen(false);
+  };
+  const handleViewStatusClose = ()=>{
+    setShowStatus(false);
+  }
+
+  const handleViewStatus = async(status) => {
+    
     setSelectedStatus(status);
+    setShowStatus(true);
+    try {
+      const response = await viewStatus(status._id);
+      console.log(response);
+      
+    } catch (error) {
+      console.log("Error occured in handling status views: ", error);
+      
+    }
+    
   };
 
   const closeStatus = () => {
@@ -50,21 +72,31 @@ const Status = () => {
       </div>
 
       {/* Add status button */}
-      <div className="p-4 relative z-20" onClick={() => handleViewStatus}>
-        <div className="w-full bg-gradient-to-r from-gray-500/10 via-pinkNew/5 to-blueNew/10 hover:from-gray-500/20 hover:via-pink-500/10 hover:to-blue-500/20 rounded-2xl p-4 flex items-center space-x-3 transition-all duration-300 backdrop-blur-md shadow-lg shadow-gray-500/10 hover:shadow-pinkNew/10">
-          <div className="relative">
+      
+      <div className="p-4 relative" >
+        <PopoverRoot>
+         
+          <div onClick={() => setIsPopoverOpen(true)} className="w-full bg-gradient-to-r from-gray-500/10 via-pinkNew/5 to-blueNew/10 hover:from-gray-500/20 hover:via-pink-500/10 hover:to-blue-500/20 rounded-2xl p-4 flex items-center space-x-3 transition-all duration-300 backdrop-blur-md shadow-lg shadow-gray-500/10 hover:shadow-pinkNew/10">
+          <div className="relative flex">
             <div className="w-14 h-14 rounded-full bg-gradient-to-r from-gray-400 via-pinkNew to-blue p-0.5">
               <img src="" alt="" className="rounded-full w-full h-full object-cover transition-opacity duration-300 opacity-100" />
             </div>
+            <PopoverTrigger>
             <div className="absolute bottom-0 right-0 w-6 h-6 bg-gradient-to-r from-pink to-blue rounded-full flex items-center justify-center border-2 border-black shadow-lg">
               <FontAwesomeIcon icon={faPlus} className="text-sx text-black"></FontAwesomeIcon>
             </div>
+            </PopoverTrigger>
           </div>
           <div className="text-left">
             <p className="font-semibold text-gray-200">Add Status</p>
             <p className="text-xs text-pinkNew">Share your updates</p>
           </div>
         </div>
+
+         
+          {isPopoverOpen && <AddStatus onClose={handlePopoverClose} />}
+        </PopoverRoot>
+        
       </div>
 
       {/* Recent updates */}
@@ -73,6 +105,32 @@ const Status = () => {
           <div className="text-sm font-semibold text-gray-300 mb-4">Recent Updates</div>
           <div className="space-y-4">
             {recentUpdates.map((status) => (
+              <div className="flex flex-col" key={status._id}>
+                <div
+                  className="flex items-center space-x-3 p-3 rounded-xl bg-gradient-to-r from-gray-500/5 via-pinkNew/5 to-blue/5 hover:from-gray-500/10 hover:via-pinkNew10 hover:to-blue/10 transition-all duration-300 backdrop-blur-md"
+                  onClick={() => handleViewStatus(status)}
+                >
+                  <div className="relative">
+                    <div className="w-14 h-14 rounded-full ring-2 ring-pinkNew/70 p-0.5 animate-pulse">
+                      <img src={status?.userId?.profilePic || null} alt="" className="rounded-full w-full h-full object-cover transition-opacity duration-300 opacity-100" />
+                    </div>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-200">{status?.userId?.name}</p>
+                    <p className="text-xs text-pinkNew">{status?.createdAt}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+       {/* Viewed updates */}
+       {viewedUpdates.length > 0 && (
+        <div className="p-4 border-b border-gray-800/20 backdrop-blur-md bg-black/30 relative z-10">
+          <div className="text-sm font-semibold text-gray-300 mb-4">Viewed Updates</div>
+          <div className="space-y-4">
+            {viewedUpdates.map((status) => (
               <div className="flex flex-col" key={status._id}>
                 <div
                   className="flex items-center space-x-3 p-3 rounded-xl bg-gradient-to-r from-gray-500/5 via-pinkNew/5 to-blue/5 hover:from-gray-500/10 hover:via-pinkNew10 hover:to-blue/10 transition-all duration-300 backdrop-blur-md"
@@ -104,7 +162,7 @@ const Status = () => {
             </button>
             
           <div className="" onClick={(e) => e.stopPropagation()}>
-            <ViewStatus status={selectedStatus} />
+          {showStatus &&   <ViewStatus status={selectedStatus} handleViewStatusClose= {handleViewStatusClose} />}
           </div>
         </div>
       )}

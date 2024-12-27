@@ -27,7 +27,10 @@ import { Input } from '@chakra-ui/react';
 
 const ContactsNew = ({ refreshContact }) => {
   const { user, selectedChat, setSelectedChat, chats, setChats } = useContext(ChatContext);
-
+  
+  // New state to store the search query
+  const [searchQuery, setSearchQuery] = useState('');
+  
   const fetchChat = async () => {
     try {
       const chatData = await fetchChats();
@@ -57,6 +60,17 @@ const ContactsNew = ({ refreshContact }) => {
     const otherUser = chat.users.find((u) => u._id !== user._id);
     return otherUser ? otherUser.name : "Unknown User";
   };
+
+  // Function to handle search input change
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  // Function to filter chats based on search query
+  const filteredChats = chats.filter((chat) => {
+    const chatName = getChatName(chat).toLowerCase();
+    return chatName.includes(searchQuery.toLowerCase());
+  });
 
   return (
     <div className="h-screen bg-gradient-to-b from-gray-950/50 via-blue/5 to-black/50 text-[0.875rem]">
@@ -108,12 +122,14 @@ const ContactsNew = ({ refreshContact }) => {
           </div>
         </div>
         {/* Search Input */}
-        <div className="border-b border-gray-800/50 mb-4">
+        <div className="border-b border-gray-800/50 mb-4 text-white">
           <div className="relative">
             <Input
               type="text"
               placeholder="Search Users..."
-              className="w-full bg-gray-800/50 rounded-xl px-4 py-2 pl-12 focus:outline-none focus:ring ring-pink/30 transition-all placeholder-gray-500 backdrop-blur-sm text-[0.875rem]"
+              className="w-full mx-3 bg-gray-800/50 rounded-xl px-4 py-2 pl-12 focus:outline-none focus:ring ring-pinkNew/30 transition-all placeholder-gray-500 backdrop-blur-sm text-[0.875rem]"
+              value={searchQuery}
+              onChange={handleSearchChange} 
             />
             <FontAwesomeIcon icon={faSquarePlus } className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500" />
           </div>
@@ -121,8 +137,8 @@ const ContactsNew = ({ refreshContact }) => {
         {/* Chats List */}
         <div className="flex-1 overflow-y-auto custom-scrollbar">
           <div className="space-y-4">
-            {chats.length > 0 ? (
-              chats.map((chat, index) => (
+            {filteredChats.length > 0 ? (
+              filteredChats.map((chat, index) => (
                 <div
                   key={index}
                   onClick={() => selectChat(chat)}

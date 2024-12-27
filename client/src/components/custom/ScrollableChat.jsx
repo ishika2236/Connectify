@@ -47,6 +47,7 @@ const ScrollableChat = ({ messages }) => {
   return (
     <div className="overflow-auto">
       <ScrollableFeed>
+      
         {messages &&
           messages.map((message, index) => (
             <div

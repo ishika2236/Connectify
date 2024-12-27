@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCross, faXmark } from "@fortawesome/free-solid-svg-icons";
 
-const ViewStatus = ({ status }) => {
+const ViewStatus = ({ status, handleViewStatusClose }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -21,8 +23,12 @@ const ViewStatus = ({ status }) => {
   };
 
   return (
-    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 z-50 w-full h-full flex items-center justify-center">
-      <div className="w-[80%] max-w-4xl h-[80%] rounded-lg shadow-lg">
+    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black  bg-opacity-50 z-50 w-full h-full flex items-center justify-center">
+      <div className="w-[80%] max-w-4xl h-[80%] rounded-lg shadow-lg p-3 bg-gray-900 " >
+        <div className="flex justify-end">
+        <FontAwesomeIcon className="text-pink text-lg" icon={faXmark} onClick={handleViewStatusClose}></FontAwesomeIcon>
+        </div>
+        
         <div className="carousel w-full h-full">
           {/* Indicators */}
           <ol className="carousel-indicators">
@@ -47,6 +53,7 @@ const ViewStatus = ({ status }) => {
                   src={`http://localhost:8080/${med.url}`}
                   alt={`media-${index}`}
                 />
+                <div className="relative bottom-0 text-pinkNew flex justify-center w-full h-full text-lg"><div>{med.caption}</div></div>
               </div>
             ))}
           </div>

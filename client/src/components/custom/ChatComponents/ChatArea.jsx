@@ -101,6 +101,10 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
 
   return (
     <Box w="100%" m={0} display="flex" flexDirection="column" className='h-screen bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950'>
+      <div className="relative inset-0 z-0">
+      <div className="absolute top-20 right-80 w-72 h-72 bg-blue/20 rounded-full filter blur-3xl"></div>
+      <div className="absolute top-80 right-20 w-72 h-72 bg-pinkNew/20 rounded-full filter blur-3xl"></div>
+    </div>
       {!selectedChat ? (
         <Box
           display="flex"
@@ -174,13 +178,13 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
             )}
             </Box>
           {/* Input Section */}
-          <Box h="5%" w={'100%'} className="p-2 pl-10">
+          <Box h="5%" w={'100%'} className="p-2 pl-10  ">
             <FormControl fullWidth>
-              <Box display="flex" alignItems="center">
+              <Box display="flex" alignItems="center" className=''>
                 
                
                 <Input
-                  variant="filled"
+                  
                   placeholder="Type a message..."
                   onChange={typingHandler}
                   onKeyDown={sendMessageHandler}

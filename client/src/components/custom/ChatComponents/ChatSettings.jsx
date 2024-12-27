@@ -64,42 +64,53 @@ const ChatSettings = ({setShowSettings, showSettings}) => {
     }
 
     return (
-        <div className="relative min-h-screen bg-gray-900 overflow-hidden p-0 m-0 ">
-            
-            <div 
-    className="z-50 text-white animate-none font-lg absolute top-4 left-4 cursor-pointer"
-    onClick={() => setShowSettings(false)}
->
-    <FontAwesomeIcon icon={faArrowLeft} />
-</div>
-            
+        <div className="relative max-h-screen bg-gray-900 overflow-hidden p-0 m-0">
+            <div
+                className="z-50 text-white animate-none font-lg absolute top-4 left-4 cursor-pointer"
+                onClick={() => setShowSettings(false)}
+            >
+                <FontAwesomeIcon icon={faArrowLeft} />
+            </div>
+    
             <div className="absolute inset-0 bg-gradient-to-r from-[#3B82F6] via-[#F472B6] to-[#3B82F6] animate-customPulse"></div>
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900 to-gray-900/80"></div>
-
+    
             {selectedChat ? (
-                <div className="relative min-h-screen z-10 overflow-hidden">
-                    <div className="relative h-full w-full overflow-y-auto p-6">
+                <div className="relative" style={{ minHeight: "100vh", overflow: "hidden" }}>
+                    <div className="relative h-full w-full overflow-y-auto p-6" style={{ maxHeight: "calc(100vh - 2rem)" }}>
                         {/* Chat Header Section */}
                         <div className="flex items-center space-x-4 mb-6">
                             {/* Chat Image */}
                             <div className="relative">
-                                <div className="w-20 h-20 bg-gradient-to-r from-blue via-pink to-blue p-0.5 animate-wiggle rounded-xl">
+                                <div
+                                    className="rounded-xl"
+                                    style={{
+                                        width: "5rem",
+                                        height: "5rem",
+                                        padding: "0.25rem",
+                                        background: "linear-gradient(to right, #3B82F6, #F472B6, #3B82F6)",
+                                        animation: "wiggle 1.5s infinite",
+                                    }}
+                                >
                                     <img
                                         src={
                                             selectedChat.isGroupChat
                                                 ? selectedChat.picURL
                                                 : selectedChat.profilePic
                                         }
-                                        className="w-full h-full object-cover rounded-xl border border-b-[#3B82F6] border-l-[#3B82F6] border-t-[#F472B6] border-r-[#F472B6] opacity-10"
+                                        className="w-full h-full object-cover rounded-xl"
                                     />
                                     {selectedChat.isGroupChat && (
-                                        <button className="absolute bottom-0 right-0 bg-blue w-6 h-6 rounded flex items-center justify-center shadow-lg border-2 border-gray-900 hover:border-blue transition-colors z-30">
+                                        <button
+                                            className="absolute bottom-0 right-0 bg-blue w-6 h-6 rounded flex items-center justify-center shadow-lg border-2 border-gray-900 hover:border-blue transition-colors z-30"
+                                            style={{ width: "1.5rem", height: "1.5rem" }}
+                                        >
                                             <FontAwesomeIcon icon={faPen} className="text-xs" />
                                         </button>
                                     )}
                                 </div>
                             </div>
-
+    
                             {/* Chat Name */}
                             <div>
                                 <h2
@@ -118,7 +129,7 @@ const ChatSettings = ({setShowSettings, showSettings}) => {
                                 )}
                             </div>
                         </div>
-
+    
                         {/* Info Section */}
                         <div className="space-y-6">
                             {/* Bio Section */}
@@ -134,11 +145,10 @@ const ChatSettings = ({setShowSettings, showSettings}) => {
                                         <span>{selectedChat.description}</span>
                                     ) : (
                                         <span>{selectedChat.users[1].bio}</span>
-                                        // <>{null}<x/>
                                     )}
                                 </p>
                             </div>
-
+    
                             {/* Group Members Section */}
                             {selectedChat.isGroupChat && (
                                 <div className="space-y-4 bg-gray-800/30 p-4 rounded-xl backdrop-blur-sm border border-gray-700/30">
@@ -146,29 +156,25 @@ const ChatSettings = ({setShowSettings, showSettings}) => {
                                         <h3 className="text-lg font-semibold text-white">Members</h3>
                                         <PopoverRoot className="w-[100%]">
                                             <PopoverTrigger>
-                                            <button
-                                                className="border border-b-[#3B82F6] border-l-[#3B82F6] border-t-[#F472B6] border-r-[#F472B6] px-3 py-1 rounded-full text-sm hover:opacity-80 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 right-2 absolute top-3 "
-                                                onClick={() => console.log("Add Member clicked")}
-                                            >
-                                                Add Member
-                                            </button>
-                                            
+                                                <button
+                                                    className="border border-b-pinkNew border-l-blue border-t-pinkNew border-r-blue px-3 py-1 rounded-full text-sm hover:opacity-80 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 right-2 absolute top-3 text-white "
+                                                    onClick={() => console.log("Add Member clicked")}
+                                                >
+                                                    Add Member
+                                                </button>
                                             </PopoverTrigger>
-                                            <PopoverContent className='p-0 m-0'>
+                                            <PopoverContent className="p-0 m-0">
                                                 <PopoverBody>
-                                                    <AddMemberPopUp/>
+                                                    <AddMemberPopUp />
                                                 </PopoverBody>
                                             </PopoverContent>
-                                            
-
                                         </PopoverRoot>
-                                        
                                     </div>
                                     <div className="space-y-2">
                                         {selectedChat.users.map((member) => (
                                             <div
                                                 key={member._id}
-                                                className="flex items-center space-x-3 hover:bg-gray-700/50 border border-gray-700/30 my-2 p-3 rounded-lg"
+                                                className="flex items-center space-x-3 hover:bg-gray-700/50 border border-pinkNew my-2 p-3 rounded-lg"
                                             >
                                                 <img
                                                     src={member.profilePic}
@@ -184,34 +190,53 @@ const ChatSettings = ({setShowSettings, showSettings}) => {
                                                         )}
                                                     </p>
                                                 </div>
-                                                <div className="absolute right-10">
-                                                <MenuRoot>
-                                                <MenuTrigger >
-                                                    <FontAwesomeIcon icon={faEllipsis}></FontAwesomeIcon>
-                                                </MenuTrigger>
-                                                <MenuContent>
-                                                    <MenuItem><div className=""><button>Message</button></div></MenuItem>
-                                                    <MenuItem><div className=""><button>View</button></div></MenuItem>
-                                                    {selectedChat.groupAdmin._id ==  user._id && selectedChat.groupAdmin._id !== member._id &&
-                                                    (<MenuItem><div className=""><button onClick={()=>{removeMember(member)}}>Remove</button></div></MenuItem>)
-
-                                                    }
-                                                </MenuContent>
-                                                </MenuRoot>
+                                                <div className="absolute right-10 text-white">
+                                                    <MenuRoot>
+                                                        <MenuTrigger>
+                                                            <FontAwesomeIcon icon={faEllipsis}></FontAwesomeIcon>
+                                                        </MenuTrigger>
+                                                        <MenuContent>
+                                                            <MenuItem>
+                                                                <div className="">
+                                                                    <button>Message</button>
+                                                                </div>
+                                                            </MenuItem>
+                                                            <MenuItem>
+                                                                <div className="">
+                                                                    <button>View</button>
+                                                                </div>
+                                                            </MenuItem>
+                                                            {selectedChat.groupAdmin._id == user._id &&
+                                                                selectedChat.groupAdmin._id !== member._id && (
+                                                                    <MenuItem>
+                                                                        <div className="">
+                                                                            <button
+                                                                                onClick={() => {
+                                                                                    removeMember(member);
+                                                                                }}
+                                                                            >
+                                                                                Remove
+                                                                            </button>
+                                                                        </div>
+                                                                    </MenuItem>
+                                                                )}
+                                                        </MenuContent>
+                                                    </MenuRoot>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                             )}
-
+    
                             {/* Danger Zone */}
                             {selectedChat.isGroupChat && (
                                 <div className="space-y-4 bg-gray-800/30 p-4 rounded-xl backdrop-blur-sm">
                                     <div className="text-lg font-semibold text-red-500">Danger Zone</div>
                                     <div className="flex space-x-3 text-sm">
-                                        <button className="flex-1 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 transition-colors text-white"
-                                        onClick={()=> removeMember(user)}
+                                        <button
+                                            className="flex-1 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 transition-colors text-white"
+                                            onClick={() => removeMember(user)}
                                         >
                                             Leave Group
                                         </button>
@@ -227,6 +252,7 @@ const ChatSettings = ({setShowSettings, showSettings}) => {
             ) : null}
         </div>
     );
+    
 };
 
 export default ChatSettings;

@@ -2,36 +2,60 @@ const asyncHandler = require('express-async-handler');
 const Status = require('../models/statusSchema');
 const Chat = require('../models/chatModel')
 
+
 const addStatus = asyncHandler(async (req, res) => {
-    // console.log(req.files);
-    const { caption } = req.body; 
-    
-    if (!req.files || req.files.length === 0) {
+    const captions = req.body.captions; 
+    const files = req.files; 
+    const captionsArray = Array.isArray(captions) ? captions : [captions];
+
+    if (!files || files.length === 0) {
         res.status(400);
-        throw new Error("No image or video received in backend");
+        throw new Error("No files received");
     }
 
-    const mediaFiles = req.files.map((file) => {
+    if (captionsArray && files.length !== captionsArray.length) {
+        res.status(400);
+        throw new Error("Number of captions and files must match");
+    }
+
+    const mediaFiles = files.map((file, index) => {
         const fileType = file.mimetype.startsWith('image') ? 'image' : 'video';
         return {
-            url:  `uploads/${file.filename}`,
+            url: `uploads/${file.filename}`, 
             type: fileType,
+            caption: captionsArray[index] || "", 
         };
     });
 
-    const newStatus = new Status({
-        userId: req.user._id,
-        media: mediaFiles,
-        caption: caption || "",
-    });
+    
+    let existingStatus = await Status.findOne({ userId: req.user._id });
 
-    const savedStatus = await newStatus.save();
+    if (existingStatus) {
+        
+        existingStatus.media = [...existingStatus.media, ...mediaFiles];
+        const updatedStatus = await existingStatus.save();
+        res.status(200).json({
+            message: 'Media added to existing status',
+            status: updatedStatus,
+        });
+    } else {
+        
+        const newStatus = new Status({
+            userId: req.user._id,
+            media: mediaFiles,
+        });
 
-    res.status(201).json({
-        message: 'Status uploaded successfully',
-        status: savedStatus,
-    });
+        const savedStatus = await newStatus.save();
+
+        res.status(201).json({
+            message: 'Status uploaded successfully',
+            status: savedStatus,
+        });
+    }
 });
+
+
+
 const fetchStatus = async (req, res) => {
     const userId = req.user._id;
     // console.log(userId);
@@ -54,7 +78,7 @@ const fetchStatus = async (req, res) => {
         
         const processedStatuses = statuses.map(status => {
             const isViewed = Array.isArray(status.viewedBy)
-                ? status.viewedBy.some(view => view.viewerId?.toString() === userId)
+                ? status.viewedBy.some(view => view.viewerId.toString() === userId.toString())
                 : false; 
             return { ...status, isViewed };
         });
@@ -65,5 +89,32 @@ const fetchStatus = async (req, res) => {
         res.status(500).json({ message: 'Error fetching statuses', error });
     }
 };
+const viewStatus = asyncHandler(async(req,res)=>{
+    const statusId = req.params.statusId;
+    const userId = req.user._id;
+    console.log("statusId: ", statusId, "userId: ", userId);
+    
+    try {
+        const statusEntry = await Status.findByIdAndUpdate(statusId, {
+            $push: {viewedBy: {
+                viewerId: userId
+            }}
+        }, {new: true});
+        if(!statusEntry)
+        {
+            return res.status(400).json({error: "No such status exists."});
+        }
+       console.log(statusEntry)
+        
+        return res.status(202).json({message: `status viewed by user ${req.user.name}`});
+        
+    } catch (error) {
+        console.log(error);
+        
+        return res.status(500).json({message: 'Server error occured in updating status views details'})
+    }
+   
 
-module.exports = { addStatus, fetchStatus };
+})
+
+module.exports = { addStatus, fetchStatus , viewStatus};
