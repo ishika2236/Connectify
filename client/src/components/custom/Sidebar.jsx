@@ -61,7 +61,10 @@ const Sidebar = () => {
           </button>
           <button className="w-4/5 py-2 px-4 rounded-xl bg-gray-800/30 hover:bg-gray-800/60 transition-all backdrop-blur-sm flex text-white items-center justify-center">
             <FontAwesomeIcon icon={faGear} />
-            <span className="hidden lg:block text-gray-300 ml-2">Settings</span>
+            <Link className='no-underline' to={'/settings'}>
+              <span className="hidden lg:block text-gray-300 ml-2">Settings</span>
+            </Link>
+            
           </button>
         </div>
       </div>

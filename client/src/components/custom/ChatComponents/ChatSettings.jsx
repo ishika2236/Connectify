@@ -93,11 +93,7 @@ const ChatSettings = ({setShowSettings, showSettings}) => {
                                     }}
                                 >
                                     <img
-                                        src={
-                                            selectedChat.isGroupChat
-                                                ? selectedChat.picURL
-                                                : selectedChat.profilePic
-                                        }
+                                        src={`${import.meta.env.VITE_API_URL}${selectedChat.isGroupChat ? selectedChat.picUrl : selectedChat.users[1]._id== user._id?selectedChat.users[0].profilePic: selectedChat.users[1].profilePic}`}
                                         className="w-full h-full object-cover rounded-xl"
                                     />
                                     {selectedChat.isGroupChat && (
@@ -138,7 +134,7 @@ const ChatSettings = ({setShowSettings, showSettings}) => {
                                     <div className="text-lg font-semibold text-white">
                                         {selectedChat.isGroupChat ? "Description" : "Bio"}
                                     </div>
-                                    <button className="text-pink text-sm transition-colors">Edit</button>
+                                    { selectedChat.isGroupChat && <button className="text-pink text-sm transition-colors">Edit</button>}
                                 </div>
                                 <p className="text-gray-400 text-sm">
                                     {selectedChat.isGroupChat ? (
@@ -177,7 +173,7 @@ const ChatSettings = ({setShowSettings, showSettings}) => {
                                                 className="flex items-center space-x-3 hover:bg-gray-700/50 border-1 border-pink/50 my-2 p-3 rounded-lg"
                                             >
                                                 <img
-                                                    src={member.profilePic}
+                                                    src={`${import.meta.env.VITE_API_URL}${member.profilePic}`}
                                                     alt="member"
                                                     className="w-10 h-10 rounded-full transition-opacity duration-300 opacity-100"
                                                     loading="lazy"

@@ -146,7 +146,7 @@ const ContactsNew = ({ refreshContact }) => {
                 >
                   <div className="w-12 h-12 rounded-full bg-gradient-to-r from-gray-600 to-pink p-0.5">
                     <img
-                      src={chat.users[1].profilePic}
+                      src={`${import.meta.env.VITE_API_URL}${chat.users[1]._id == user._id? chat.users[0].profilePic: chat.users[1].profilePic}`}
                       alt={chat.chatName}
                       className="rounded-full w-full h-full object-cover"
                     />

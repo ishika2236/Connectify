@@ -135,7 +135,7 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
           >
             <div className="flex gap-4 items-center">
               <img
-                src={selectedChat.isGroupChat ? selectedChat.picUrl : selectedChat.users[1]?.profilePic}
+                src={`${import.meta.env.VITE_API_URL}${selectedChat.isGroupChat ? selectedChat.picUrl : selectedChat.users[1]._id== user._id?selectedChat.users[0].profilePic: selectedChat.users[1].profilePic}`}
                 alt="Profile"
                 className="w-10 h-10 rounded-full"
               />

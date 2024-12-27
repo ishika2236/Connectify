@@ -63,7 +63,7 @@ const ScrollableChat = ({ messages }) => {
                   <Tooltip label={message?.sender?.name} placement="bottom-start" hasArrow>
                     <div>
                       <img
-                        src={message?.sender?.profilePic}
+                        src={`${import.meta.env.VITE_API_URL}${message?.sender?.profilePic}`}
                         alt="Sender Profile"
                         className="w-10 h-10 rounded-full my-2"
                       />

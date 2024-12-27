@@ -58,6 +58,7 @@ export default {
           off: '#E5E5E5',  // Soft ivory gray off-white
         },
         charcoal: '#2E2E33',
+        red: '#FF0000'
       },
     },
   },

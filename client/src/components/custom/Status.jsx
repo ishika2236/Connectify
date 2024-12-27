@@ -67,7 +67,7 @@ const Status = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(0,255,255,0.1),transparent_40%)] pointer-events-none"></div>
 
       {/* Heading */}
-      <div className="p-4 border-b border-gray-800/20 backdrop-blur-sm bg-black/40 relative z-10">
+      <div className="p-4 border-b border-gray-800/20 backdrop-blur-sm bg-gray-950/20 relative z-10">
         <h2 className="text-2xl font-bold bg-gradient-to-b from-gray-200 via-pinkNew to-blue bg-clip-text text-transparent">Status</h2>
       </div>
 

@@ -7,6 +7,7 @@ import StatusPage from './pages/StatusPage'
 import CallPage from './pages/CallPage'
 import SignUp from './components/custom/SignUp'
 import Login from './components/custom/Login'
+import Settings from './components/custom/Settings'
 
 
 const App = () => {
@@ -18,7 +19,8 @@ const App = () => {
         <Route path='/signup' element={<SignUp/>}></Route>
         <Route path='/status' element = {<StatusPage/>} ></Route>
         <Route path='/calls' element= {<CallPage/>}></Route>
-        <Route path='/login' element= {<Login/>}></Route>
+        <Route path='/login' element= {<Login  />}></Route>
+        <Route path='/settings' element = {<Settings/>}></Route>
 
       </Routes>
       
