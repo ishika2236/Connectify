@@ -12,6 +12,18 @@ const ENDPOINT = import.meta.env.VITE_API_URL;
 import { useRef } from 'react';
 
 const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
+  useEffect(() => {
+    if(selectedChat)
+    {
+      console.log(selectedChat);
+      
+      console.log(selectedChat.picURL);
+      
+    console.log(`${import.meta.env.VITE_API_URL}${(selectedChat.isGroupChat === true) ? selectedChat.picURL : selectedChat.users[1]._id== user._id?selectedChat.users[0].profilePic: selectedChat.users[1].profilePic}`); 
+
+    }
+  },)
+  
   const { user, selectedChat, setSelectedChat } = useContext(ChatContext);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -63,6 +75,7 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
     };
 
     fetchChatMessages();
+    
   }, [selectedChat]);
 
   useEffect(() => {
@@ -79,6 +92,7 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
     return () => {
       socketRef.current?.off('message recieved');
     };
+
   }, [selectedChat]);
 
   const sendMessageHandler = async (event) => {
@@ -133,9 +147,9 @@ const ChatArea = ({ refreshContact, setRefreshContact, setShowSettings }) => {
             zIndex={10}
             h="10%" 
           >
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-4 items-center text-sm">
               <img
-                src={`${import.meta.env.VITE_API_URL}${selectedChat.isGroupChat ? selectedChat.picUrl : selectedChat.users[1]._id== user._id?selectedChat.users[0].profilePic: selectedChat.users[1].profilePic}`}
+                src={`${import.meta.env.VITE_API_URL}${selectedChat.isGroupChat ? selectedChat.picURL : selectedChat.users[1]._id== user._id?selectedChat.users[0].profilePic: selectedChat.users[1].profilePic}`}
                 alt="Profile"
                 className="w-10 h-10 rounded-full"
               />

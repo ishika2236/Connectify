@@ -13,10 +13,15 @@ const ChatProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       const token = localStorage.getItem('token');
-      if (!token) {
-        navigate('/');
-        return;
+      const currentPath = window.location.pathname;
+      if(!token)
+      {if (currentPath !== '/signup' && currentPath !== '/login') {
+        navigate('/login'); // Default to /login if the path is not valid
       }
+      return;
+
+      }
+      
 
       try {
         
@@ -25,7 +30,7 @@ const ChatProvider = ({ children }) => {
         setUser(userInfo);
       } catch (error) {
         console.error('Failed to fetch user info', error);
-        navigate('/');
+        navigate('/auth');
       }
     };
 
