@@ -50,7 +50,7 @@ const ViewStatus = ({ status, handleViewStatusClose }) => {
               >
                 <img
                   className="d-block w-full h-auto object-cover"
-                  src={`http://localhost:8080/${med.url}`}
+                  src={`${import.meta.env.VITE_API_URL}${med.url}`}
                   alt={`media-${index}`}
                 />
                 <div className="relative bottom-0 text-pinkNew flex justify-center w-full h-full text-lg"><div>{med.caption}</div></div>
