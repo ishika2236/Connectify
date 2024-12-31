@@ -1,7 +1,6 @@
 import React from 'react'
 import Sidebar from '../components/custom/Sidebar'
 import ContactsNew from '../components/custom/ContactsNew'
-import Conversation from '../components/custom/Conversation'
 import { Container , Box} from '@chakra-ui/react'
 import ChatBox from '../components/custom/ChatBox'
 

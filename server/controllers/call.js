@@ -1,7 +1,7 @@
 const AsyncHandler = require('express-async-handler');
 const Call = require('../models/callSchema');
 
-const updateCallHistory = AsyncHandler(async(roomId, participants, duration)=>{
+const updateCallHistory = AsyncHandler(async(roomId, participants,duration)=>{
     try {
         
         const callHistory = new Call({roomId, participants, duration});
